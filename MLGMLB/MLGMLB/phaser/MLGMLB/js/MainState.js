@@ -35,7 +35,7 @@ State1.MainState.prototype = {
 	//music
 	game.load.audio('mainTh','assets/audio/TitleTheme.mp3');
 	//interactables
-	game.load.spritesheet('mage','assets/spritesheets/mage1.png', 85, 94); //player
+	game.load.spritesheet('mage','assets/player1.png', 85, 94); //player
 	game.load.spritesheet('flame','assets/spritesheets/flameball-32x32.png', 32, 32); //falling fireballs
 	game.load.spritesheet('bolt','assets/spritesheets/mage-bullet-13x13.png', 13, 13);	//moving obstacle that kills you
 	},
@@ -124,8 +124,8 @@ State1.MainState.prototype = {
 		player.body.collideWorldBounds = true;
 		
 		//enable animations
-		player.animations.add('left', [0,1], 5, true);
-		player.animations.add('right', [0,1,2,3,4,5,6,7], 10, true);
+		//player.animations.add('left', [0,1], 5, true);
+		//player.animations.add('right', [0,1,2,3,4,5,6,7], 10, true);
 		
 		
 		
@@ -205,7 +205,7 @@ State1.MainState.prototype = {
 		cursors = game.input.keyboard.createCursorKeys();
 		
 		//where the animations are managed
-		player.animations.play('right');
+		//player.animations.play('right');
 		bolt.animations.play('left');
 		var count = 0;
 		while (count < flames.length) //initialize falling flame animations
