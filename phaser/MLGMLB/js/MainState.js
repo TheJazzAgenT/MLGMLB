@@ -7,6 +7,7 @@ State1.MainState = function(game){
 	var treeArr;*/
 	var player;											//   new variables for player,
 	var player_ship;								//	 opponent, and ships
+	var movement;
 	var opponent;										//
 	var opponent_ship;							//
 	var stars;// score givers
@@ -42,8 +43,8 @@ State1.MainState.prototype = {
 	game.load.spritesheet('opponent','assets/player 2.png', 64, 64);				//player2 or Ai
 	game.load.spritesheet('ship1','assets/ship_1.png', 162, 224); 					//
 	game.load.spritesheet('ship2','assets/ship_1.png', 162, 224);						// ships
-	game.load.spritesheet('flame','assets/spritesheets/flameball-32x32.png', 32, 32); //falling fireballs
-	game.load.spritesheet('bolt','assets/spritesheets/projectile.png', 13, 13);	//moving obstacle that kills you
+	//game.load.spritesheet('flame','assets/spritesheets/flameball-32x32.png', 32, 32); //falling fireballs
+	//game.load.spritesheet('bolt','assets/spritesheets/projectile.png', 13, 13);	//moving obstacle that kills you
 	},
 	
 	create: function()
@@ -105,7 +106,7 @@ State1.MainState.prototype = {
 //								Adding the ships and the player sprites													//
 		player_ship = game.add.sprite(game.world.width*.25-100, game.world.height - 500, 'ship1');
 		player_ship.scale.setTo(1, 1.5);
-
+		movement = 1;
 		opponent_ship = game.add.sprite(game.world.width*.75-100, game.world.height - 500, 'ship2');
 		opponent_ship.scale.setTo(1, 1.5);
 
@@ -119,7 +120,7 @@ State1.MainState.prototype = {
 
 //																														 //
 // 			This keeps player 1 inside the bounds of the ship.		//
-		game.physics.arcade.setBounds(player_ship.x, player_ship.y, player_ship.x , player_ship.y);
+		game.physics.arcade.setBounds(player_ship.x, player_ship.y, player_ship.width , player_ship.height);
 
 		//give the player some Physics
 		game.physics.arcade.enable(player);
@@ -127,13 +128,13 @@ State1.MainState.prototype = {
 		player.body.collideWorldBounds = true;
 
 		//create array to keep track of fireball sprites and initialize all the objects in the game world out of sight
-		flames = [game.add.sprite(game.world.width-400, 0, 'flame')];
+		/*flames = [game.add.sprite(game.world.width-400, 0, 'flame')];
 		game.physics.arcade.enable(flames[0]);
 		flames[0].scale.setTo(3,3);
-		flames[0].animations.add('down',[0,1,2,3], 10, true);
+		flames[0].animations.add('down',[0,1,2,3], 10, true);*/
 
 		//loop to create the objects
-		var iter = 1;
+		/*var iter = 1;
 		while (iter < 5)
 		{
 			flames.push(game.add.sprite(iter * 250, 0, 'flame'));
@@ -152,7 +153,7 @@ State1.MainState.prototype = {
 		game.physics.arcade.enable(bolt);
 		bolt.scale.setTo(3,3);
 		bolt.animations.add('left', [4,3,2,1,0], 10, true);
-
+		*/
 		//setup for score
 		scoreText = game.add.text(16,16, 'Score: 0', {fontSize: '32px', fill: '#000'});
 	},
@@ -161,22 +162,22 @@ State1.MainState.prototype = {
 	{
 		//collision checks
 		//var hitPlatform = game.physics.arcade.collide(player, platforms);
-		game.physics.arcade.overlap(player, bolt, this.bolted, null, this); //calls bolted() upon overlap. this kills player and changes state.
+		//game.physics.arcade.overlap(player, bolt, this.bolted, null, this); //calls bolted() upon overlap. this kills player and changes state.
 		//game.physics.arcade.overlap(player,flames, this.bolted, null, this);
 
 		//whole buncha bounds checking to get overlap collision more reasonable for fireballs
 		var boundsA = player.getBounds();
 		boundsA.scale(.5,.5);
-		var boundsB = flames[0].getBounds();
+		/*var boundsB = flames[0].getBounds();
 		var boundsC = flames[1].getBounds();
 		var boundsD = flames[2].getBounds();
 		var boundsE = flames[3].getBounds();
-		var boundsF = flames[4].getBounds();
-		if (Phaser.Rectangle.intersects(boundsA, boundsB) ||Phaser.Rectangle.intersects(boundsA, boundsC) || Phaser.Rectangle.intersects(boundsA, boundsD) || Phaser.Rectangle.intersects(boundsA, boundsE) || Phaser.Rectangle.intersects(boundsA, boundsF))
+		var boundsF = flames[4].getBounds();*/
+		/*if (Phaser.Rectangle.intersects(boundsA, boundsB) ||Phaser.Rectangle.intersects(boundsA, boundsC) || Phaser.Rectangle.intersects(boundsA, boundsD) || Phaser.Rectangle.intersects(boundsA, boundsE) || Phaser.Rectangle.intersects(boundsA, boundsF))
 		{
 				game.physics.arcade.overlap(player, flames, this.bolted, null, this);
 				//this.bolted;
-		}
+		}*/
 				//end of collision checking
 
 		var bool = true;
@@ -190,13 +191,13 @@ State1.MainState.prototype = {
 
 		//where the animations are managed
 		//player.animations.play('right');
-		bolt.animations.play('left');
+		//bolt.animations.play('left');
 		var count = 0;
-		while (count < flames.length) //initialize falling flame animations
+		/*while (count < flames.length) //initialize falling flame animations
 		{
 			flames[count].animations.play('down');
 			count++;
-		}
+		}*/
 //																												//
 //																												//
 //									Heres how the player moves						//
@@ -227,7 +228,7 @@ State1.MainState.prototype = {
 		}
 
 		//difficulty modifier If/elseif/else branch
-		count = 0;
+		/*count = 0;
 		if (game.time.totalElapsedSeconds() < 15) //as seconds increase, everything begins moving faster
 		{
 			bolt.x -=2;
@@ -243,7 +244,7 @@ State1.MainState.prototype = {
 			{
 				treeArr[count].x -= 4;
 				count++;
-			}*/
+			}
 		}
 		else if (game.time.totalElapsedSeconds() > 14 && game.time.totalElapsedSeconds() < 25) //each else if is checking for a specific amt of time passed and increases speed of all things
 		{
@@ -261,8 +262,8 @@ State1.MainState.prototype = {
 				treeArr[count].x -= 6;
 				count++;
 			}*/
-		}
-		else if (game.time.totalElapsedSeconds() > 24 && game.time.totalElapsedSeconds() < 35)
+		//}
+		/*else if (game.time.totalElapsedSeconds() > 24 && game.time.totalElapsedSeconds() < 35)
 		{
 			bolt.x -= 8;
 			count = 0;
@@ -272,12 +273,12 @@ State1.MainState.prototype = {
 				flames[count].x -=2;
 				count++;
 			}
-			count = 0;
+			count = 0;*/
 			/*while (count < treeArr.length)
 			{
 				treeArr[count].x -= 8;
 				count++;
-			}*/
+			}
 		}
 		else if (game.time.totalElapsedSeconds() > 34 && game.time.totalElapsedSeconds() < 50)
 		{
@@ -294,7 +295,7 @@ State1.MainState.prototype = {
 			{
 				treeArr[count].x -= 10;
 				count++;
-			}*/
+			}
 		}
 		else
 		{
@@ -311,25 +312,25 @@ State1.MainState.prototype = {
 			{
 				treeArr[count].x -= 19;
 				count++;
-			}*/
-		}
+			}
+		}*/
 		//end of challenge modifiers
 		//where world wrapping is specified for all items except player
-		game.world.wrap(bolt, 800, false);
-		count = 0;
+		//game.world.wrap(bolt, 800, false);
+		//count = 0;
 		/*while (count < treeArr.length)
 		{
 			game.world.wrap(treeArr[count],120,false);
 			count++;
 		}*/
-		count = 0;
-		while (count < flames.length)
+		//count = 0;
+		/* while (count < flames.length)
 		{
 			game.world.wrap(flames[count], count*500);
 			count++;
-		}
+		} */
 
-		var Rand = Math.random();// used to randomize location of bolt when it re-enters the screen
+		/* var Rand = Math.random();// used to randomize location of bolt when it re-enters the screen
 		if(bolt.x < -400)
 		{
 			//check for out of bounds
@@ -361,7 +362,40 @@ State1.MainState.prototype = {
 			{
 				bolt.y += 2;
 			}
+		} */
+		/*Switch = true;
+		if (player_ship.y <= 100)
+		{
+			Switch = false;
 		}
+		else if (player_ship.y >= 900)
+		{
+			Switch = true;
+		}
+		if(Switch)
+		{
+			player_ship.y -= 1;
+			//game.physics.arcade.setBounds(player_ship.x, player_ship.y, player_ship.width , player_ship.height);
+			
+		}
+		if(Switch == false)
+		{
+			player_ship.y += 1;
+		}*/
+		
+		if (player_ship.y <= 0)
+		{
+			movement *= -1;
+		}
+		if (player_ship.y >= 600)
+		{
+			movement *= -1;
+		}
+		player.y += movement;
+		player_ship.y += movement;
+		game.physics.arcade.setBounds(player_ship.x, player_ship.y, player_ship.width , player_ship.height);
+		
+		
 	},
 
 	//changes state on impact with purple bolt or flames
