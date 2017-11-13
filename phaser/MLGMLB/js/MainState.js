@@ -22,11 +22,12 @@ State1.MainState = function(game){
 	var flames; //array for falling flames
 	var music;
 	var bballs;
-	var fireRate = 100;
-	var nextFire = 0;
 	//var deathMusic;
 };
 
+var fireRate = 0.2;
+var nextFire = 0;
+  
 State1.MainState.prototype = {
 	preload: function()
 	{
@@ -95,7 +96,6 @@ State1.MainState.prototype = {
 
 	update : function()
 	{
-    console.log('updating');
 		//whole buncha bounds checking to get overlap collision more reasonable for fireballs
 		var boundsA = player.getBounds();
 		boundsA.scale(.5,.5);
@@ -154,11 +154,11 @@ State1.MainState.prototype = {
 	},
   //fire a bullet
 	fire: function() {
-		if (this.game.time.totalElapsedSeconds() > this.nextFire)// && bullets.countDead() > 0)
+		if (this.game.time.totalElapsedSeconds() > nextFire && bballs.countDead() > 0)
 		{
 			nextFire = this.game.time.totalElapsedSeconds() + fireRate;
-			var bullet = bullets.getFirstDead();
-			bullet.reset(sprite.x - 8, sprite.y - 8);
+			var bullet = bballs.getFirstDead();
+			bullet.reset(player.x - 8, player.y - 8);
 			game.physics.arcade.moveToPointer(bullet, 300);
 		}
 	 },
