@@ -79,6 +79,7 @@ State1.MainState.prototype = {
 
 		//give the player some Physics
 		game.physics.arcade.enable(player);
+    game.physics.arcade.enable(opponent);
 
 		player.body.collideWorldBounds = true;
     
@@ -108,7 +109,7 @@ State1.MainState.prototype = {
     // Hit baseball when click
     if (game.input.activePointer.isDown)
     {
-        this.fire();
+      this.fire();
     }
 		//player movement controls---arrow keys are used to move
 		cursors = game.input.keyboard.createCursorKeys();
@@ -151,7 +152,8 @@ State1.MainState.prototype = {
 		player.y += movement;
 		player_ship.y += movement;
 		game.physics.arcade.setBounds(player_ship.x, player_ship.y, player_ship.width , player_ship.height);
-	},
+    game.physics.arcade.overlap(opponent, bballs, this.hitOpponent, null, this);
+  },
   //fire a bullet
 	fire: function() {
 		if (this.game.time.totalElapsedSeconds() > nextFire && bballs.countDead() > 0)
@@ -162,6 +164,11 @@ State1.MainState.prototype = {
 			game.physics.arcade.moveToPointer(bullet, 300);
 		}
 	 },
+   hitOpponent: function(opponent, bullet) {
+     console.log('collided');
+    opponent.kill();
+    bullet.kill();
+   },
 	//changes state on impact with purple bolt or flames
 	bolted : function()
 	{
