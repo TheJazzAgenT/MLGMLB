@@ -151,6 +151,8 @@ State1.MainState.prototype = {
 		}
 		player.y += movement;
 		player_ship.y += movement;
+		opponent.y -= movement;
+		opponent_ship.y -= movement; //bad ship moves now
 		game.physics.arcade.setBounds(player_ship.x, player_ship.y, player_ship.width , player_ship.height);
     game.physics.arcade.overlap(opponent, bballs, this.hitOpponent, null, this);
   },
