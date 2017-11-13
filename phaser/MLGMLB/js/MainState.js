@@ -21,9 +21,9 @@ State1.MainState = function(game){
 	var bolt;
 	var flames; //array for falling flames
 	var music;
-  var bballs;
-  var fireRate = 100;
-  var nextFire = 0;
+	var bballs;
+	var fireRate = 100;
+	var nextFire = 0;
 	//var deathMusic;
 };
 
@@ -108,12 +108,12 @@ State1.MainState.prototype = {
     // Hit baseball when click
     if (game.input.activePointer.isDown)
     {
-        fire();
+        this.fire();
     }
 		//player movement controls---arrow keys are used to move
 		cursors = game.input.keyboard.createCursorKeys();
 		var count = 0;
-    // Heres how the player moves
+		// Heres how the player moves
 		if(cursors.up.isDown)
 		{
 			player.body.velocity.y = -100;
@@ -153,15 +153,15 @@ State1.MainState.prototype = {
 		game.physics.arcade.setBounds(player_ship.x, player_ship.y, player_ship.width , player_ship.height);
 	},
   //fire a bullet
-  fire: function() {
-    if (game.time.now > nextFire && bullets.countDead() > 0)
-    {
-        nextFire = game.time.now + fireRate;
-        var bullet = bullets.getFirstDead();
-        bullet.reset(sprite.x - 8, sprite.y - 8);
-        game.physics.arcade.moveToPointer(bullet, 300);
-    }
-  },
+	fire: function() {
+		if (this.game.time.totalElapsedSeconds() > this.nextFire)// && bullets.countDead() > 0)
+		{
+			nextFire = this.game.time.totalElapsedSeconds() + fireRate;
+			var bullet = bullets.getFirstDead();
+			bullet.reset(sprite.x - 8, sprite.y - 8);
+			game.physics.arcade.moveToPointer(bullet, 300);
+		}
+	 },
 	//changes state on impact with purple bolt or flames
 	bolted : function()
 	{
